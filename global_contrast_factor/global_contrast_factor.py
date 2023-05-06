@@ -10,6 +10,9 @@ class GlobalContrastFactor:
     def compute_perceptual_luminance(self, image: np.ndarray, gamma : float = 2.2):
         return 100 * np.sqrt(self.compute_luminance(image, gamma))
     
+    def weight_factors(self, level: int, max_level: int = 9):
+        return (-0.406385 * level / max_level + 0.334573) * level/max_level + 0.0877526
+
     def compute_image_average_contrast(self, image: np.ndarray, gamma : float = 2.2):
         L = self.compute_perceptual_luminance(image, gamma)
         # pad image with border replicating edge values
@@ -30,7 +33,7 @@ class GlobalContrastFactor:
 
         return np.mean(pixel_avgs)
     
-    def __call__(self, image : np.ndarray):
+    def __call__(self, image : np.ndarray, gamma : float = 2.2):
         if image.ndim != 2:
             gr = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
@@ -41,10 +44,10 @@ class GlobalContrastFactor:
         gcf = 0
 
         for i,size in enumerate(superpixel_sizes,1):
-            wi =(-0.406385 * i / 9 + 0.334573) * i/9 + 0.0877526
+            wi = self.weight_factors(i)
             im_scale = cv2.resize(gr, (0,0), fx=1/size, fy=1/size,
                                 interpolation=cv2.INTER_LINEAR)
-            avg_contrast_scale = self.compute_image_average_contrast(im_scale)
+            avg_contrast_scale = self.compute_image_average_contrast(im_scale, gamma)
             gcf += wi * avg_contrast_scale
 
         return gcf
