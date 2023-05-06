@@ -5,7 +5,7 @@ setup(
   packages = find_packages(exclude=[]),
   version = '0.0.1',
   license='MIT',
-  description = 'Global contrast Factor  - Pytorch',
+  description = 'Global contrast Factor  - Python',
   author = 'Jinwon Kim',
   author_email = 'code.eric22@gmail.com',
   long_description_content_type = 'text/markdown',
