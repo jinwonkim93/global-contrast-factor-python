@@ -17,7 +17,5 @@ print(gfc(img_low_contrast))
 
 # Install
 ```bash
-git clone https://github.com/jinwonkim93/global-contrast-factor-python.git
-cd global-contrast-factor-python
-pip install -e .
+pip install global-contrast-factor-python
 ```
